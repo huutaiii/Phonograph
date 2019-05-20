@@ -667,7 +667,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
             default:
             case REPEAT_MODE_NONE:
                 if (isLastTrack()) {
-                    position -= 1;
+                    position = 0;
                 }
                 break;
         }
@@ -1191,8 +1191,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
 
                 case TRACK_WENT_TO_NEXT:
                     if (service.getRepeatMode() == REPEAT_MODE_NONE && service.isLastTrack()) {
-                        service.pause();
-                        service.seek(0);
+                        service.setPosition(0);
                     } else {
                         service.position = service.nextPosition;
                         service.prepareNextImpl();
@@ -1204,8 +1203,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                     // if there is a timer finished, don't continue
                     if (service.pendingQuit ||
                             service.getRepeatMode() == REPEAT_MODE_NONE && service.isLastTrack()) {
-                        service.notifyChange(PLAY_STATE_CHANGED);
-                        service.seek(0);
+                        service.setPosition(0);
                         if (service.pendingQuit) {
                             service.pendingQuit = false;
                             service.quit();
