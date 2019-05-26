@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.Html;
+
 import androidx.core.app.NotificationCompat;
 import androidx.media.app.NotificationCompat.MediaStyle;
 import androidx.palette.graphics.Palette;
@@ -23,6 +25,8 @@ import com.kabouzeid.gramophone.service.MusicService;
 import com.kabouzeid.gramophone.ui.activities.MainActivity;
 import com.kabouzeid.gramophone.util.MusicUtil;
 import com.kabouzeid.gramophone.util.PreferenceUtil;
+
+import java.util.Locale;
 
 import static com.kabouzeid.gramophone.service.MusicService.ACTION_REWIND;
 import static com.kabouzeid.gramophone.service.MusicService.ACTION_SKIP;
@@ -84,7 +88,7 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
                                 .setLargeIcon(bitmap)
                                 .setContentIntent(clickIntent)
                                 .setDeleteIntent(deleteIntent)
-                                .setContentTitle(song.title)
+                                .setContentTitle(Html.fromHtml(String.format(Locale.getDefault(), "<strong>%s</strong>", song.title)))
                                 .setContentText(song.artistName)
                                 .setOngoing(isPlaying)
                                 .setShowWhen(false)
