@@ -99,7 +99,7 @@ public class AppWidgetBig extends BaseAppWidget {
                 target = SongGlideRequest.Builder.from(Glide.with(appContext), song)
                         .checkIgnoreMediaStore(appContext)
                         .asBitmap().build()
-                        .transform(new BlurTransformation.Builder(appContext).build())
+                        .transform(new BlurTransformation.Builder(appContext).blurRadius(8).build())
                         .into(new SimpleTarget<Bitmap>(widgetImageSize, widgetImageSize) {
                             @Override
                             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
