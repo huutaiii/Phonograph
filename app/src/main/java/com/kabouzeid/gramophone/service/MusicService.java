@@ -209,10 +209,19 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
 
         mediaStoreObserver = new MediaStoreObserver(playerHandler);
         throttledSeekHandler = new ThrottledSeekHandler(playerHandler);
-        getContentResolver().registerContentObserver(
-                MediaStore.Audio.Media.INTERNAL_CONTENT_URI, true, mediaStoreObserver);
-        getContentResolver().registerContentObserver(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, true, mediaStoreObserver);
+
+        getContentResolver().registerContentObserver(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, true, mediaStoreObserver);
+        getContentResolver().registerContentObserver(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, true, mediaStoreObserver);
+        getContentResolver().registerContentObserver(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, true, mediaStoreObserver);
+        getContentResolver().registerContentObserver(MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI, true, mediaStoreObserver);
+        getContentResolver().registerContentObserver(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, true, mediaStoreObserver);
+
+        getContentResolver().registerContentObserver(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, true, mediaStoreObserver);
+        getContentResolver().registerContentObserver(MediaStore.Audio.Albums.INTERNAL_CONTENT_URI, true, mediaStoreObserver);
+        getContentResolver().registerContentObserver(MediaStore.Audio.Artists.INTERNAL_CONTENT_URI, true, mediaStoreObserver);
+        getContentResolver().registerContentObserver(MediaStore.Audio.Genres.INTERNAL_CONTENT_URI, true, mediaStoreObserver);
+        getContentResolver().registerContentObserver(MediaStore.Audio.Playlists.INTERNAL_CONTENT_URI, true, mediaStoreObserver);
+
 
         PreferenceUtil.getInstance(this).registerOnSharedPreferenceChangedListener(this);
 
@@ -561,7 +570,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                 new PlaybackStateCompat.Builder()
                         .setActions(MEDIA_SESSION_ACTIONS)
                         .setState(isPlaying() ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
-                                getPosition(), 1)
+                                getSongProgressMillis(), 1)
                         .build());
     }
 
@@ -667,7 +676,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
             default:
             case REPEAT_MODE_NONE:
                 if (isLastTrack()) {
-                    position = 0;
+                    position -= 1;
                 }
                 break;
         }
@@ -1190,8 +1199,14 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                     break;
 
                 case TRACK_WENT_TO_NEXT:
-                    if (service.getRepeatMode() == REPEAT_MODE_NONE && service.isLastTrack()) {
-                        service.setPosition(0);
+                    if (service.pendingQuit || service.getRepeatMode() == REPEAT_MODE_NONE && service.isLastTrack()) {
+                        service.pause();
+                        service.seek(0);
+                        if (service.pendingQuit) {
+                            service.pendingQuit = false;
+                            service.quit();
+                            break;
+                        }
                     } else {
                         service.position = service.nextPosition;
                         service.prepareNextImpl();
@@ -1203,7 +1218,8 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                     // if there is a timer finished, don't continue
                     if (service.pendingQuit ||
                             service.getRepeatMode() == REPEAT_MODE_NONE && service.isLastTrack()) {
-                        service.setPosition(0);
+                        service.notifyChange(PLAY_STATE_CHANGED);
+                        service.seek(0);
                         if (service.pendingQuit) {
                             service.pendingQuit = false;
                             service.quit();
@@ -1344,6 +1360,8 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         }
 
         public void notifySeek() {
+            updateMediaSessionMetaData();
+            updateMediaSessionPlaybackState();
             mHandler.removeCallbacks(this);
             mHandler.postDelayed(this, THROTTLE);
         }
