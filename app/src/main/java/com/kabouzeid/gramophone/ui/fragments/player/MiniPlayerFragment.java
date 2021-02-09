@@ -14,13 +14,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.kabouzeid.gramophone.R;
+import com.kabouzeid.gramophone.glide.SongGlideRequest;
 import com.kabouzeid.gramophone.helper.MusicPlayerRemote;
 import com.kabouzeid.gramophone.helper.MusicProgressViewUpdateHelper;
 import com.kabouzeid.gramophone.helper.PlayPauseButtonOnClickHandler;
+import com.kabouzeid.gramophone.model.Song;
 import com.kabouzeid.gramophone.ui.fragments.AbsMusicServiceFragment;
+import com.kabouzeid.gramophone.util.MusicUtil;
 import com.kabouzeid.gramophone.views.PlayPauseDrawable;
 
 import butterknife.BindView;
@@ -37,6 +41,10 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
 
     @BindView(R.id.mini_player_title)
     TextView miniPlayerTitle;
+    @BindView(R.id.mini_player_info)
+    TextView miniPlayerInfo;
+    @BindView(R.id.mini_player_album_art)
+    ImageView miniPlayerAlbumArt;
     @BindView(R.id.mini_player_play_pause_button)
     ImageView miniPlayerPlayPauseButton;
     @BindView(R.id.progress_bar)
@@ -86,7 +94,12 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
     }
 
     private void updateSongTitle() {
-        miniPlayerTitle.setText(MusicPlayerRemote.getCurrentSong().title);
+        Song song = MusicPlayerRemote.getCurrentSong();
+        miniPlayerTitle.setText(song.title);
+        miniPlayerInfo.setText(MusicUtil.getSongInfoString(song));
+        SongGlideRequest.Builder.from(Glide.with(getActivity()), song)
+                .checkIgnoreMediaStore(getActivity()).build()
+                .into(((ImageView) miniPlayerAlbumArt));
     }
 
     @Override

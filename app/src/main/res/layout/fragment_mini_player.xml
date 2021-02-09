@@ -12,8 +12,15 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/mini_player_height_wo_progress"
         android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/mini_player_album_art"
+            android:layout_width="@dimen/mini_player_height"
+            android:layout_height="@dimen/mini_player_height"
+            tools:ignore="ContentDescription"
+            tools:srcCompat="@drawable/default_album_art" />
 
         <com.kabouzeid.gramophone.views.IconImageView
             android:id="@+id/mini_player_image"
@@ -22,21 +29,38 @@
             android:layout_gravity="center_vertical"
             android:layout_margin="16dp"
             android:scaleType="centerCrop"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_expand_less_white_24dp"
             tools:ignore="ContentDescription" />
 
-        <TextView
-            android:id="@+id/mini_player_title"
+        <LinearLayout
+            android:id="@+id/mini_player_song"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/mini_player_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+            <TextView
+                android:id="@+id/mini_player_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        </LinearLayout>
 
         <com.kabouzeid.gramophone.views.IconImageView
             android:id="@+id/mini_player_play_pause_button"
