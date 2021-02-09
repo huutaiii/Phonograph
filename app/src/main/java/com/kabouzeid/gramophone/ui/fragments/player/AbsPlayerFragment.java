@@ -116,7 +116,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
     }
 
     protected void toggleToolbar(@Nullable final View toolbar) {
-        if (isToolbarShown()) {
+        if (false && isToolbarShown()) {
             hideToolbar(toolbar);
         } else {
             showToolbar(toolbar);
