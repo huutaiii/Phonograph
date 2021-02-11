@@ -24,7 +24,7 @@
         android:theme="@style/Theme.Phonograph.Light"
         android:requestLegacyExternalStorage="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.activities.SplashActivity" android:theme="@style/Splash">
+        <activity android:name=".ui.activities.LauncherActivity" android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

@@ -37,6 +37,6 @@
         <item name="android:transitionName" tools:ignore="NewApi">toolbar</item>
     </style>
 
-    <style name="Splash" parent="Theme.AppCompat.DayNight.NoActionBar"></style>
+    <style name="SplashScreen" parent="Theme.AppCompat.DayNight.NoActionBar"></style>
 
 </resources>
