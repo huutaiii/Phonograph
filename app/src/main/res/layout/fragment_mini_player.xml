@@ -17,8 +17,9 @@
 
         <ImageView
             android:id="@+id/mini_player_album_art"
-            android:layout_width="@dimen/mini_player_height"
-            android:layout_height="@dimen/mini_player_height"
+            android:layout_width="@dimen/mini_player_height_wo_progress"
+            android:layout_height="@dimen/mini_player_height_wo_progress"
+            android:padding="8dp"
             tools:ignore="ContentDescription"
             tools:srcCompat="@drawable/default_album_art" />
 
@@ -58,6 +59,7 @@
                 android:id="@+id/mini_player_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         </LinearLayout>

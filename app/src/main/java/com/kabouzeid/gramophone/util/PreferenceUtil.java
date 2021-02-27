@@ -145,8 +145,13 @@ public final class PreferenceUtil {
             case "black":
                 return R.style.Theme_Phonograph_Black;
             case "light":
-            default:
                 return R.style.Theme_Phonograph_Light;
+            case "system":
+                return R.style.Theme_Phonograph_System;
+            case "system_black":
+                return R.style.Theme_Phonograph_SystemBlack;
+            default:
+                throw new IllegalArgumentException();
         }
     }
 

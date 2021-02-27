@@ -1,9 +1,13 @@
 package com.kabouzeid.gramophone.ui.activities.base;
 
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.ColorInt;
+
 import android.view.View;
 
 import com.kabouzeid.appthemehelper.ATH;
@@ -23,7 +27,15 @@ public abstract class AbsThemeActivity extends ATHToolbarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(PreferenceUtil.getInstance(this).getGeneralTheme());
+        int theme = PreferenceUtil.getInstance(this).getGeneralTheme();
+        boolean uiModeNight = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_YES) != 0;
+        if (theme == R.style.Theme_Phonograph_System) {
+            setTheme(PreferenceUtil.getThemeResFromPrefValue(uiModeNight ? "dark" : "light"));
+        } else if (theme == R.style.Theme_Phonograph_SystemBlack) {
+            setTheme(PreferenceUtil.getThemeResFromPrefValue(uiModeNight ? "black" : "light"));
+        } else {
+            setTheme(theme);
+        }
         super.onCreate(savedInstanceState);
         MaterialDialogsUtil.updateMaterialDialogsThemeSingleton(this);
     }
